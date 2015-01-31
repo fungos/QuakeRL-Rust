@@ -2,7 +2,6 @@ extern crate event;
 extern crate quack;
 extern crate window;
 extern crate "input" as input_lib;
-use self::input_lib::{Button, Key};
 use cgmath::*;
 use sdl2_window::Sdl2Window as Window;
 //use self::glfw_window::GlfwWindow as Window;
@@ -21,6 +20,7 @@ impl App {
     }
 
     // Run the app
+    #[allow(unused_variables)]
     pub fn run(&mut self) {
         use std::cell::RefCell;
         use cgmath::{Aabb2, Point2};

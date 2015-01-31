@@ -1,4 +1,7 @@
 #![cfg_attr(test, allow(warnings))]
+#![feature(collections)]
+#![feature(path)]
+
 //extern crate glfw_window;
 extern crate sdl2_window;
 extern crate opengl_graphics;
