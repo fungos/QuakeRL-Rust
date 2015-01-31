@@ -1,9 +1,11 @@
 extern crate graphics;
+extern crate quack;
 use render::{Render, Draw};
 use std::vec::Vec;
 use opengl_graphics::Texture;
-use quack::Set;
+use self::quack::Set;
 use graphics::{Image, SrcRect, RelativeTransform};
+use cgmath::*;
 
 #[allow(dead_code)]
 enum Tiles {
@@ -82,12 +84,14 @@ impl TileMap {
 }
 
 impl Draw for TileMap {
-    fn draw(&self, at: &[f64; 2], render: &mut Render) {
+    fn draw(&self, at: &Vector2<f32>, render: &mut Render) {
 
         // Ugly, try to use an iterator rather then line/column loop algorithm
         for y in 0..self.y_size {
             for x in 0..self.x_size {
-                let sprite_context = &render.ctx.trans(at[0] + (x * 40) as f64, at[1] + (y * 40) as f64);
+                let px = at.x + (x * 40) as f32;
+                let py = at.y + (y * 40) as f32;
+                let sprite_context = &render.ctx.trans(px as f64, py as f64);
                 Image::new().set(SrcRect([0, (self.map[(x + self.x_size * y) as usize] as i32) * 40, 40, 40])).draw(&self.tileset, sprite_context, &mut render.gl);
             }
         }

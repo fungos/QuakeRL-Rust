@@ -1,13 +1,12 @@
-extern crate piston;
-extern crate input;
 extern crate event;
+extern crate quack;
 extern crate window;
-extern crate sdl2_window;
-
-use shader_version::opengl::OpenGL;
-use settings::Settings;
+extern crate "input" as input_lib;
+use self::input_lib::{Button, Key};
+use cgmath::*;
 use sdl2_window::Sdl2Window as Window;
-
+//use self::glfw_window::GlfwWindow as Window;
+use settings::Settings;
 
 // Represents the App
 pub struct App {
@@ -23,18 +22,17 @@ impl App {
 
     // Run the app
     pub fn run(&mut self) {
-        // Set the namespaces
         use std::cell::RefCell;
-        use event::Events;
-        use game::Game;
-        use player::Player;
-        use volume::AABB;
-        use render::Render;
-        use tilemap::TileMap;
-        use input::Input;
+        use cgmath::{Aabb2, Point2};
 
-        let w = self.config.window_width as f64;
-        let h = self.config.window_height as f64;
+        use render::Render;
+        use input::Input;
+        use player::Player;
+        use tilemap::TileMap;
+        use game::Game;
+
+        let w = self.config.window_width as f32;
+        let h = self.config.window_height as f32;
 
         // Create the window
         let window = RefCell::new(self.window());
@@ -43,7 +41,7 @@ impl App {
 
         // Create the player
         let mut player = Player::from_path(&Path::new("./assets/ranger_avatar.png"));
-        player.set_pos([60.0, 60.0]);
+        player.set_pos(Vector2::new(80.0, 80.0 as f32));
 
         // Create the map
         let mut tilemap = TileMap::from_tileset_path(&Path::new("./assets/tileset.png"));
@@ -56,21 +54,20 @@ impl App {
             player: player,
             tilemap: tilemap,
             timestamp: 0.0,
-            top_wall:    AABB::new([w / 2.0, 20.0],     [w / 2.0, 20.0]),
-            bottom_wall: AABB::new([w / 2.0, h - 20.0], [w / 2.0, 20.0]),
-            left_wall:   AABB::new([20.0, h / 2.0],     [20.0, h / 2.0]),
-            right_wall:  AABB::new([w - 20.0, h / 2.0], [20.0, h / 2.0]),
+            top_wall:    Aabb2::new(Point2::new(0.0, 0.0),      Point2::new(w as f32, 40.0)),
+            bottom_wall: Aabb2::new(Point2::new(0.0, h as f32 - 40.0), Point2::new(w as f32, h as f32)),
+            left_wall:   Aabb2::new(Point2::new(0.0, 0.0),      Point2::new(40.0, h as f32)),
+            right_wall:  Aabb2::new(Point2::new(w as f32 - 40.0, 0.0), Point2::new(w as f32, h as f32)),
         };
 
         // Iterate the main game loop
-        let mut dt : f64 = 0.0;
-        for e in piston::events(&window) {
-            use piston::input::Input;
-            use piston::event::Event;
-            use event::{RenderEvent, UpdateEvent, PressEvent, ReleaseEvent };
-            let e: Event<Input> = e;
-            e.render (|args|   game.render(args));
-            e.update (|args| { game.update(args); dt = args.dt; });
+        let mut dt : f32 = 0.0;
+        for e in self::event::events(&window) {
+            use self::event::{Event, RenderEvent, UpdateEvent, PressEvent, ReleaseEvent };
+
+            let e: Event<input_lib::Input> = e;
+            e.render (|args|   game.render());
+            e.update (|args| { game.update(args.dt); dt = args.dt as f32; });
             e.press  (|args|   game.input.press(args, dt));
             e.release(|args|   game.input.release(args, dt));
         }
@@ -78,6 +75,8 @@ impl App {
 
     // Returns a window.
     fn window(&self) -> Window {
+        use shader_version::opengl::OpenGL;
+
         // Values for Window Creation
         let window_settings = window::WindowSettings {
             title: self.config.title.to_string(),
