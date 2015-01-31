@@ -117,7 +117,7 @@ impl Input {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use piston::input::{Button, Key};
+    use super::input_lib::{Button, Key};
 
     #[test]
     fn signal_axisx_opposite_press()
