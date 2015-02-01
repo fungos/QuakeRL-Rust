@@ -1,4 +1,5 @@
 extern crate graphics;
+
 use shader_version::opengl::OpenGL;
 use opengl_graphics::{Gl, Texture};
 use texture::ImageSize;
@@ -37,15 +38,18 @@ impl Render {
         }
     }
 
+    #[inline]
     pub fn draw<T: Draw>(&mut self, obj: &T, at: &Vector2<f32>) {
         obj.draw(at, self);
     }
 
+    #[inline]
     pub fn state_push(&mut self, state: RenderState) {
         self.state_apply(&state);
         self.states.push(state);
     }
 
+    #[inline]
     pub fn state_pop(&mut self) -> RenderState {
         assert!(self.states.len() > 1, "Unbalanced push<>pop.");
         let ret = self.states.pop().unwrap();

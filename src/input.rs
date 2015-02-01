@@ -47,6 +47,7 @@ impl Input {
         }
     }
 
+    #[inline]
     pub fn get_signal(&mut self, signal: Signal) -> f32 {
         //! Get a specified signal current value.
         //!
@@ -64,6 +65,7 @@ impl Input {
     }
 
     #[allow(dead_code)]
+    #[inline]
     pub fn get_signal_data(&mut self, signal: Signal) -> (f32, f32, f32) {
         //! Get a specified signal stored data in the form of a 3-tuple of f32:
         //! (signal value, milliseconds begin/press time, milliseconds end/release time)
@@ -74,6 +76,7 @@ impl Input {
     // there is a old bug (sdl?) when we press LEFT+(UP|DOWN) and then the next (DOWN|UP) is not registered.
     // try this: right, down, then up.
     // compare with: left, down then up.
+    #[inline]
     fn do_press(&mut self, signal: Signal, amount: f32, dt: f32) {
         let idx = signal as usize;
         let (val, _, _) = self.buffer.pressed[idx];
@@ -81,6 +84,7 @@ impl Input {
         self.buffer.pressed[idx] = (val + amount, dt, 0.0);
     }
 
+    #[inline]
     fn do_release(&mut self, signal: Signal, amount: f32, dt: f32) {
         let idx = signal as usize;
         let (val, press_dt, _) = self.buffer.pressed[idx];
@@ -89,6 +93,7 @@ impl Input {
     }
 
     // to_: http://aturon.github.io/style/naming/conversions.html
+    #[inline]
     fn to_signal(button: Button) -> Option<(Signal, f32)> {
         match button {
             Button::Keyboard(Key::Up)       => { Some((Signal::AxisY, -1.0)) },
@@ -99,6 +104,7 @@ impl Input {
         }
     }
 
+    #[inline]
     pub fn press(&mut self, button: Button, dt: f32) {
         match Input::to_signal(button) {
             Some((signal, amount)) => self.do_press(signal, amount, dt),
@@ -106,6 +112,7 @@ impl Input {
         }
     }
 
+    #[inline]
     pub fn release(&mut self, button: Button, dt: f32) {
         match Input::to_signal(button) {
             Some((signal, amount)) => self.do_release(signal, amount, dt),

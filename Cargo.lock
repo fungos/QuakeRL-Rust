@@ -3,6 +3,7 @@ name = "QuakeRL-Rust"
 version = "0.0.1"
 dependencies = [
  "cgmath 0.0.1 (git+http://github.com/bjz/cgmath-rs)",
+ "fps_counter 0.0.0 (git+https://github.com/pistondevelopers/fps_counter)",
  "piston-texture 0.0.1 (git+https://github.com/PistonDevelopers/texture)",
  "piston2d-graphics 0.0.9 (git+https://github.com/pistondevelopers/graphics)",
  "piston2d-opengl_graphics 0.0.6 (git+https://github.com/pistondevelopers/opengl_graphics)",
@@ -34,6 +35,14 @@ version = "0.0.2"
 source = "git+https://github.com/tomaka/clock_ticks#75347002bc4fee853b385da8d3b50fee1c146aae"
 
 [[package]]
+name = "fps_counter"
+version = "0.0.0"
+source = "git+https://github.com/pistondevelopers/fps_counter#6e8bb78b8bda0c886d27ef4302776d6815b0c1ec"
+dependencies = [
+ "time 0.1.15 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "freetype-rs"
 version = "0.0.6"
 source = "git+https://github.com/PistonDevelopers/freetype-rs.git#b03afd3259e3ca36bf3d3dd8589b760b604e6aff"
@@ -50,6 +59,11 @@ dependencies = [
  "libz-sys 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pkg-config 0.1.7 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
+
+[[package]]
+name = "gcc"
+version = "0.1.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "gl"
@@ -98,6 +112,11 @@ source = "git+https://github.com/bjz/gl-rs#c5303f86a9aac5392bae959b21a8af84e8651
 [[package]]
 name = "khronos_api"
 version = "0.0.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "libc"
+version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
@@ -244,6 +263,15 @@ dependencies = [
 name = "shader_version"
 version = "0.0.1"
 source = "git+https://github.com/pistondevelopers/shader_version#71300bf707ef3cd5079eefdec8bb3a101baacf7e"
+
+[[package]]
+name = "time"
+version = "0.1.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "gcc 0.1.7 (registry+https://github.com/rust-lang/crates.io-index)",
+ "libc 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
+]
 
 [[package]]
 name = "vecmath"

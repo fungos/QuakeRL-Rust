@@ -1,8 +1,10 @@
+use std::num::Float;
+
 use cgmath::*;
 use graphics::ImageSize;
 use opengl_graphics::Texture;
+
 use render::{Render, Draw, draw_texture};
-use std::num::Float;
 
 pub struct Player {
     pub image: Texture,
@@ -12,21 +14,28 @@ pub struct Player {
 impl Player {
 
     #[allow(dead_code)]
+    #[inline]
     pub fn get_pos(&self) -> Vector2<f32> {
         self.aabb.center().to_vec()
     }
 
+    #[inline]
     pub fn set_pos(&mut self, pos: Vector2<f32>) {
         let diff = pos - self.get_pos();
         self.add_pos(diff);
     }
 
+    #[inline]
     pub fn add_pos(&mut self, pos: Vector2<f32>) {
         self.aabb = self.aabb.add_v(&pos);
     }
 
+    #[inline]
     pub fn intersect(&self, other: &Aabb2<f32>) -> bool {
-        other.contains(self.aabb.min()) || other.contains(self.aabb.max())
+        let min = self.aabb.min();
+        let max = self.aabb.max();
+
+        other.contains(min) || other.contains(max) || other.contains(&Point2::new(min.x, max.y)) || other.contains(&Point2::new(max.x, min.y))
     }
 
     pub fn from_path(path: &Path) -> Player {
@@ -41,6 +50,7 @@ impl Player {
 }
 
 impl Draw for Player {
+    #[inline]
     fn draw(&self, at: &Vector2<f32>, render: &mut Render) {
         draw_texture(&self.image, at, render);
         render.draw(&self.aabb, at);

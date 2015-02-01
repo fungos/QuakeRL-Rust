@@ -10,6 +10,7 @@ extern crate shader_version;
 extern crate texture;
 extern crate cgmath;
 extern crate graphics;
+extern crate fps_counter;
 
 mod app;
 mod settings;
