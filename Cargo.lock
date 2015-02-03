@@ -2,7 +2,8 @@
 name = "QuakeRL-Rust"
 version = "0.0.1"
 dependencies = [
- "piston 0.0.4 (git+https://github.com/pistondevelopers/piston)",
+ "cgmath 0.0.1 (git+http://github.com/bjz/cgmath-rs)",
+ "fps_counter 0.0.0 (git+https://github.com/pistondevelopers/fps_counter)",
  "piston-texture 0.0.1 (git+https://github.com/PistonDevelopers/texture)",
  "piston2d-graphics 0.0.9 (git+https://github.com/pistondevelopers/graphics)",
  "piston2d-opengl_graphics 0.0.6 (git+https://github.com/pistondevelopers/opengl_graphics)",
@@ -21,9 +22,25 @@ version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
+name = "cgmath"
+version = "0.0.1"
+source = "git+http://github.com/bjz/cgmath-rs#9bb0f78944ad1fe4ad580300502ae83ca0fc75ce"
+dependencies = [
+ "rustc-serialize 0.2.10 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "clock_ticks"
 version = "0.0.2"
 source = "git+https://github.com/tomaka/clock_ticks#75347002bc4fee853b385da8d3b50fee1c146aae"
+
+[[package]]
+name = "fps_counter"
+version = "0.0.0"
+source = "git+https://github.com/pistondevelopers/fps_counter#6e8bb78b8bda0c886d27ef4302776d6815b0c1ec"
+dependencies = [
+ "time 0.1.15 (registry+https://github.com/rust-lang/crates.io-index)",
+]
 
 [[package]]
 name = "freetype-rs"
@@ -42,6 +59,11 @@ dependencies = [
  "libz-sys 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pkg-config 0.1.7 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
+
+[[package]]
+name = "gcc"
+version = "0.1.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "gl"
@@ -93,6 +115,11 @@ version = "0.0.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
+name = "libc"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
 name = "libz-sys"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -111,17 +138,6 @@ version = "0.1.10"
 source = "git+https://github.com/rust-lang/num#c05cd530dbc1cc2e56f936524400b368e07ee5cb"
 dependencies = [
  "rustc-serialize 0.2.10 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "piston"
-version = "0.0.4"
-source = "git+https://github.com/pistondevelopers/piston#d91cce01bf2803d8d6232e8550ceb90123d57e12"
-dependencies = [
- "pistoncore-event 0.0.7 (git+https://github.com/pistondevelopers/event)",
- "pistoncore-input 0.0.5 (git+https://github.com/pistondevelopers/input)",
- "pistoncore-window 0.0.5 (git+https://github.com/pistondevelopers/window)",
- "quack 0.0.8 (git+https://github.com/pistondevelopers/quack)",
 ]
 
 [[package]]
@@ -247,6 +263,15 @@ dependencies = [
 name = "shader_version"
 version = "0.0.1"
 source = "git+https://github.com/pistondevelopers/shader_version#71300bf707ef3cd5079eefdec8bb3a101baacf7e"
+
+[[package]]
+name = "time"
+version = "0.1.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "gcc 0.1.7 (registry+https://github.com/rust-lang/crates.io-index)",
+ "libc 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
+]
 
 [[package]]
 name = "vecmath"

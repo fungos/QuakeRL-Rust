@@ -1,20 +1,22 @@
 #![cfg_attr(test, allow(warnings))]
-extern crate vecmath;
-extern crate graphics;
-extern crate piston;
+#![feature(collections)]
+#![feature(path)]
+
+//extern crate glfw_window;
 extern crate sdl2_window;
 extern crate opengl_graphics;
 extern crate shader_version;
-extern crate event;
-extern crate quack;
-extern crate texture;
 
-mod settings;
+extern crate texture;
+extern crate cgmath;
+extern crate graphics;
+extern crate fps_counter;
+
 mod app;
+mod settings;
 mod render;
 mod game;
 mod player;
-mod volume;
 mod tilemap;
 mod input;
 

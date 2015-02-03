@@ -1,4 +1,5 @@
-use piston::input::{Button, Key};
+extern crate "input" as input_lib;
+use self::input_lib::{Button, Key};
 
 /// TEMPORARY: A number maximum for input signals. This should be the size of enum Signal.
 const MAX_INPUT : usize = 2; // find how to use size of Signal
@@ -21,7 +22,7 @@ pub enum Signal {
 
 /// Internal buffer that hold all needed states from current inputs.
 struct InputBuffer {
-    pressed: [(f64, f64, f64); MAX_INPUT],
+    pressed: [(f32, f32, f32); MAX_INPUT],
 //    previous_pressed: [(f32, f64, f64); MAX_INPUT],
 }
 
@@ -46,7 +47,8 @@ impl Input {
         }
     }
 
-    pub fn get_signal(&mut self, signal: Signal) -> f64 {
+    #[inline]
+    pub fn get_signal(&mut self, signal: Signal) -> f32 {
         //! Get a specified signal current value.
         //!
         //! Example:
@@ -63,8 +65,9 @@ impl Input {
     }
 
     #[allow(dead_code)]
-    pub fn get_signal_data(&mut self, signal: Signal) -> (f64, f64, f64) {
-        //! Get a specified signal stored data in the form of a 3-tuple of f64:
+    #[inline]
+    pub fn get_signal_data(&mut self, signal: Signal) -> (f32, f32, f32) {
+        //! Get a specified signal stored data in the form of a 3-tuple of f32:
         //! (signal value, milliseconds begin/press time, milliseconds end/release time)
         self.buffer.pressed[signal as usize]
     }
@@ -73,14 +76,16 @@ impl Input {
     // there is a old bug (sdl?) when we press LEFT+(UP|DOWN) and then the next (DOWN|UP) is not registered.
     // try this: right, down, then up.
     // compare with: left, down then up.
-    fn do_press(&mut self, signal: Signal, amount: f64, dt: f64) {
+    #[inline]
+    fn do_press(&mut self, signal: Signal, amount: f32, dt: f32) {
         let idx = signal as usize;
         let (val, _, _) = self.buffer.pressed[idx];
         //println!("press: {} - {}", val, amount);
         self.buffer.pressed[idx] = (val + amount, dt, 0.0);
     }
 
-    fn do_release(&mut self, signal: Signal, amount: f64, dt: f64) {
+    #[inline]
+    fn do_release(&mut self, signal: Signal, amount: f32, dt: f32) {
         let idx = signal as usize;
         let (val, press_dt, _) = self.buffer.pressed[idx];
         //println!("release: {} - {}", val, amount);
@@ -88,7 +93,8 @@ impl Input {
     }
 
     // to_: http://aturon.github.io/style/naming/conversions.html
-    fn to_signal(button: Button) -> Option<(Signal, f64)> {
+    #[inline]
+    fn to_signal(button: Button) -> Option<(Signal, f32)> {
         match button {
             Button::Keyboard(Key::Up)       => { Some((Signal::AxisY, -1.0)) },
             Button::Keyboard(Key::Down)     => { Some((Signal::AxisY,  1.0)) },
@@ -98,14 +104,16 @@ impl Input {
         }
     }
 
-    pub fn press(&mut self, button: Button, dt: f64) {
+    #[inline]
+    pub fn press(&mut self, button: Button, dt: f32) {
         match Input::to_signal(button) {
             Some((signal, amount)) => self.do_press(signal, amount, dt),
             None => (),
         }
     }
 
-    pub fn release(&mut self, button: Button, dt: f64) {
+    #[inline]
+    pub fn release(&mut self, button: Button, dt: f32) {
         match Input::to_signal(button) {
             Some((signal, amount)) => self.do_release(signal, amount, dt),
             None => (),
@@ -116,7 +124,7 @@ impl Input {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use piston::input::{Button, Key};
+    use super::input_lib::{Button, Key};
 
     #[test]
     fn signal_axisx_opposite_press()

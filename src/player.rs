@@ -1,32 +1,41 @@
-use vecmath::*;
+use std::num::Float;
+
+use cgmath::*;
 use graphics::ImageSize;
 use opengl_graphics::Texture;
-use volume::{AABB};
+
 use render::{Render, Draw, draw_texture};
 
 pub struct Player {
     pub image: Texture,
-    aabb: AABB,
+    aabb: Aabb2<f32>,
 }
 
 impl Player {
 
     #[allow(dead_code)]
-    pub fn get_pos(&self) -> [f64; 2] {
-        self.aabb.get_pos()
+    #[inline]
+    pub fn get_pos(&self) -> Vector2<f32> {
+        self.aabb.center().to_vec()
     }
 
-    pub fn set_pos(&mut self, pos: [f64; 2]) {
-        self.aabb.set_pos(pos);
+    #[inline]
+    pub fn set_pos(&mut self, pos: Vector2<f32>) {
+        let diff = pos - self.get_pos();
+        self.add_pos(diff);
     }
 
-    pub fn add_pos(&mut self, pos: [f64; 2]) {
-        let pos = vec2_add(self.get_pos(), pos);
-        self.aabb.set_pos(pos);
+    #[inline]
+    pub fn add_pos(&mut self, pos: Vector2<f32>) {
+        self.aabb = self.aabb.add_v(&pos);
     }
 
-    pub fn intersect(&self, other: &AABB) -> bool {
-        self.aabb.intersect_aabb(other)
+    #[inline]
+    pub fn intersect(&self, other: &Aabb2<f32>) -> bool {
+        let min = self.aabb.min();
+        let max = self.aabb.max();
+
+        other.contains(min) || other.contains(max) || other.contains(&Point2::new(min.x, max.y)) || other.contains(&Point2::new(max.x, min.y))
     }
 
     pub fn from_path(path: &Path) -> Player {
@@ -35,13 +44,14 @@ impl Player {
 
         Player {
             image: texture,
-            aabb: AABB::new([0.0, 0.0], [w as f64 / 2.0, h as f64 / 2.0]),
+            aabb: Aabb2::new(Point2::new(0.0, 0.0), Point2::new(w as f32, h as f32)),
         }
     }
 }
 
 impl Draw for Player {
-    fn draw(&self, at: &[f64; 2], render: &mut Render) {
+    #[inline]
+    fn draw(&self, at: &Vector2<f32>, render: &mut Render) {
         draw_texture(&self.image, at, render);
         render.draw(&self.aabb, at);
     }
